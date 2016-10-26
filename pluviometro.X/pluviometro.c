@@ -29,7 +29,7 @@
  */
 unsigned i=0;
 unsigned dato_an_h,dato_an_l;
-unsigned dato_an;
+unsigned dato_an,dato_an2;
 
 struct{
     unsigned short   R10ml;
@@ -75,8 +75,47 @@ int main(int argc, char** argv) {
     Port_Config();
     Rv_Config();
     ADC_Config();
+    dato_an=0;
     while(1){
         i++;
+        dato_an2=dato_an;
+ if(dato_an2<limites.L5ml){
+     PORTC=0;
+     PORTB=0;
+ }else if(limites.L5ml<dato_an2<limites.L10ml){
+     PORTC=1;
+     PORTB=0;
+ }else if(limites.L10ml<dato_an2<limites.L15ml){
+     PORTC=2;
+     PORTB=0;
+ }else if(limites.L15ml<dato_an2<limites.L20ml){
+     PORTC=4;
+     PORTB=0;
+ }else if(limites.L20ml<dato_an2<limites.L25ml){
+     PORTC=8;
+     PORTB=0;
+ }else if(limites.L25ml<dato_an2<limites.L30ml){
+     PORTC=16;
+     PORTB=0;
+ }else if(limites.L30ml<dato_an2<limites.L35ml){
+     PORTC=32;
+     PORTB=0;
+ }else if(limites.L35ml<dato_an2<limites.L40ml){
+     PORTC=64;
+     PORTB=0;
+ }else if(limites.L40ml<dato_an2<limites.L45ml){
+     PORTC=128;
+     PORTB=0;
+ }else if(limites.L45ml<dato_an2<limites.L50ml){
+     PORTC=0;
+     PORTB=1;
+ }else if(limites.L50ml<dato_an2<limites.L55ml){
+     PORTC=0;
+     PORTB=2;
+ }else{
+     PORTC=0;
+     PORTB=4;
+ }
     }
     return (EXIT_SUCCESS);
 }
@@ -117,7 +156,7 @@ void Rv_Config(void){
     Rf1=100;
     Rf2=100;
     
-    tmp=(1023*2*100)/(11*15+200);
+//    tmp=(1023*2*100)/(11*15+200);
     tmp=204600.0/(11.0*15.0+200.0);
     
     limites.L5ml=204600.0/((float)(Rv.R10ml+Rv.R15ml+Rv.R20ml+Rv.R25ml+Rv.R30ml+Rv.R35ml+Rv.R40ml+Rv.R45ml+Rv.R50ml+Rv.R55ml+Rv.R60ml)+200.0);
@@ -145,45 +184,6 @@ void interrupt interrupciones(void)
  dato_an_h=ADRESH;
  dato_an_l=ADRESL;
  dato_an=256*dato_an_h+dato_an_l;
- 
- if(dato_an<limites.L5ml){
-     PORTC=0;
-     PORTB=0;
- }else if(dato_an<limites.L10ml){
-     PORTC=0x01;
-     PORTB=0;
- }else if(dato_an<limites.L15ml){
-     PORTC=0x02;
-     PORTB=0;
- }else if(dato_an<limites.L20ml){
-     PORTC=0x04;
-     PORTB=0;
- }else if(dato_an<limites.L25ml){
-     PORTC=8;
-     PORTB=0;
- }else if(dato_an<limites.L30ml){
-     PORTC=16;
-     PORTB=0;
- }else if(dato_an<limites.L35ml){
-     PORTC=32;
-     PORTB=0;
- }else if(dato_an<limites.L40ml){
-     PORTC=64;
-     PORTB=0;
- }else if(dato_an<limites.L45ml){
-     PORTC=128;
-     PORTB=0;
- }else if(dato_an<limites.L50ml){
-     PORTC=0;
-     PORTB=1;
- }else if(dato_an<limites.L55ml){
-     PORTC=0;
-     PORTB=2;
- }else{
-     PORTC=0;
-     PORTB=4;
- }
- 
  ADCON0bits.GO=1;
  
  return;
