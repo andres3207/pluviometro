@@ -141,7 +141,7 @@ void Port_Config(void){
 
 void ADC_Config(void){
     ADCON1=0x8F;
-    ADCON0=0x40;
+    ADCON0=0x80;
     INTCONbits.GIE=1;
     INTCONbits.PEIE=1;
     PIR1bits.ADIF=0;
