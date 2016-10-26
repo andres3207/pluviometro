@@ -32,19 +32,20 @@ unsigned dato_an_h,dato_an_l;
 unsigned dato_an,dato_an2;
 
 struct{
-    unsigned short   R10ml;
-    unsigned short   R15ml;
-    unsigned short   R20ml;
-    unsigned short   R25ml;
-    unsigned short   R30ml;
-    unsigned short   R35ml;
-    unsigned short   R40ml;
-    unsigned short   R45ml;
-    unsigned short   R50ml;
-    unsigned short   R55ml;
-    unsigned short   R60ml;
+    unsigned   R10ml;
+    unsigned   R15ml;
+    unsigned   R20ml;
+    unsigned   R25ml;
+    unsigned   R30ml;
+    unsigned   R35ml;
+    unsigned   R40ml;
+    unsigned   R45ml;
+    unsigned   R50ml;
+    unsigned   R55ml;
+    unsigned   R60ml;
 } Rv;
 
+/*
 struct{
     unsigned short   L5ml;
     unsigned short   L10ml;
@@ -59,9 +60,11 @@ struct{
     unsigned short   L55ml;
     unsigned short   L60ml;
 } limites;
+*/
 
+unsigned short  L5ml,L10ml,L15ml,L20ml,L25ml,L30ml,L35ml,L40ml,L45ml,L50ml,L55ml,L60ml;
 
-unsigned short Rf1,Rf2;
+unsigned Rf1,Rf2;
 
 unsigned vf2;
 float tmp;
@@ -79,43 +82,49 @@ int main(int argc, char** argv) {
     while(1){
         i++;
         dato_an2=dato_an;
- if(dato_an2<limites.L5ml){
+        
+ if(dato_an2<L5ml){
      PORTC=0;
      PORTB=0;
- }else if(limites.L5ml<dato_an2<limites.L10ml){
+ }else if(dato_an2<L10ml){
      PORTC=1;
      PORTB=0;
- }else if(limites.L10ml<dato_an2<limites.L15ml){
+ }else if(dato_an2<L15ml){
      PORTC=2;
      PORTB=0;
- }else if(limites.L15ml<dato_an2<limites.L20ml){
+ }else if(dato_an2<L20ml){
      PORTC=4;
      PORTB=0;
- }else if(limites.L20ml<dato_an2<limites.L25ml){
+ }else if(dato_an2<L25ml){
      PORTC=8;
      PORTB=0;
- }else if(limites.L25ml<dato_an2<limites.L30ml){
+ }else if(dato_an2<L30ml){
      PORTC=16;
      PORTB=0;
- }else if(limites.L30ml<dato_an2<limites.L35ml){
+ }else if(dato_an2<L35ml){
      PORTC=32;
      PORTB=0;
- }else if(limites.L35ml<dato_an2<limites.L40ml){
+ }else if(dato_an2<L40ml){
      PORTC=64;
      PORTB=0;
- }else if(limites.L40ml<dato_an2<limites.L45ml){
+ }else if(dato_an2<L45ml){
      PORTC=128;
      PORTB=0;
- }else if(limites.L45ml<dato_an2<limites.L50ml){
+ }else if(dato_an2<L50ml){
      PORTC=0;
      PORTB=1;
- }else if(limites.L50ml<dato_an2<limites.L55ml){
+ }else if(dato_an2<L55ml){
      PORTC=0;
      PORTB=2;
  }else{
      PORTC=0;
      PORTB=4;
  }
+        
+        
+        if(ADCON0bits.GO_DONE==0){
+            ADCON0bits.GO_DONE=1;
+        }
     }
     return (EXIT_SUCCESS);
 }
@@ -132,7 +141,7 @@ void Port_Config(void){
 
 void ADC_Config(void){
     ADCON1=0x8F;
-    ADCON0=0x00;
+    ADCON0=0x40;
     INTCONbits.GIE=1;
     INTCONbits.PEIE=1;
     PIR1bits.ADIF=0;
@@ -157,8 +166,8 @@ void Rv_Config(void){
     Rf2=100;
     
 //    tmp=(1023*2*100)/(11*15+200);
-    tmp=204600.0/(11.0*15.0+200.0);
-    
+    //tmp=204600.0/(11.0*15.0+200.0);
+    /*
     limites.L5ml=204600.0/((float)(Rv.R10ml+Rv.R15ml+Rv.R20ml+Rv.R25ml+Rv.R30ml+Rv.R35ml+Rv.R40ml+Rv.R45ml+Rv.R50ml+Rv.R55ml+Rv.R60ml)+200.0);
     limites.L10ml=204600.0/((float)(Rv.R15ml+Rv.R20ml+Rv.R25ml+Rv.R30ml+Rv.R35ml+Rv.R40ml+Rv.R45ml+Rv.R50ml+Rv.R55ml+Rv.R60ml)+200.0);
     limites.L15ml=204600.0/((float)(Rv.R20ml+Rv.R25ml+Rv.R30ml+Rv.R35ml+Rv.R40ml+Rv.R45ml+Rv.R50ml+Rv.R55ml+Rv.R60ml)+200.0);
@@ -170,7 +179,20 @@ void Rv_Config(void){
     limites.L45ml=204600.0/((float)(Rv.R50ml+Rv.R55ml+Rv.R60ml)+200.0);
     limites.L50ml=204600.0/((float)(Rv.R55ml+Rv.R60ml)+200.0);
     limites.L55ml=204600.0/((float)(Rv.R60ml)+200.0);
-    limites.L60ml=204600.0/(200.0);
+    limites.L60ml=204600.0/(200.0); */
+    
+    L5ml=204600.0/((float)(Rv.R10ml+Rv.R15ml+Rv.R20ml+Rv.R25ml+Rv.R30ml+Rv.R35ml+Rv.R40ml+Rv.R45ml+Rv.R50ml+Rv.R55ml+Rv.R60ml)+200.0);
+    L10ml=204600.0/((float)(Rv.R15ml+Rv.R20ml+Rv.R25ml+Rv.R30ml+Rv.R35ml+Rv.R40ml+Rv.R45ml+Rv.R50ml+Rv.R55ml+Rv.R60ml)+200.0);
+    L15ml=204600.0/((float)(Rv.R20ml+Rv.R25ml+Rv.R30ml+Rv.R35ml+Rv.R40ml+Rv.R45ml+Rv.R50ml+Rv.R55ml+Rv.R60ml)+200.0);
+    L20ml=204600.0/((float)(Rv.R25ml+Rv.R30ml+Rv.R35ml+Rv.R40ml+Rv.R45ml+Rv.R50ml+Rv.R55ml+Rv.R60ml)+200.0);
+    L25ml=204600.0/((float)(Rv.R30ml+Rv.R35ml+Rv.R40ml+Rv.R45ml+Rv.R50ml+Rv.R55ml+Rv.R60ml)+200.0);
+    L30ml=204600.0/((float)(Rv.R35ml+Rv.R40ml+Rv.R45ml+Rv.R50ml+Rv.R55ml+Rv.R60ml)+200.0);
+    L35ml=204600.0/((float)(Rv.R40ml+Rv.R45ml+Rv.R50ml+Rv.R55ml+Rv.R60ml)+200.0);
+    L40ml=204600.0/((float)(Rv.R45ml+Rv.R50ml+Rv.R55ml+Rv.R60ml)+200.0);
+    L45ml=204600.0/((float)(Rv.R50ml+Rv.R55ml+Rv.R60ml)+200.0);
+    L50ml=204600.0/((float)(Rv.R55ml+Rv.R60ml)+200.0);
+    L55ml=204600.0/((float)(Rv.R60ml)+200.0);
+    L60ml=204600.0/(200.0);
 }
 
 /***********************************/
@@ -180,11 +202,12 @@ void Rv_Config(void){
 void interrupt interrupciones(void)
 {
  if (ADIE && ADIF) {
- ADIF=0;
+ 
  dato_an_h=ADRESH;
  dato_an_l=ADRESL;
  dato_an=256*dato_an_h+dato_an_l;
- ADCON0bits.GO=1;
+ ADIF=0;
+ //ADCON0bits.GO=1;
  
  return;
  }
